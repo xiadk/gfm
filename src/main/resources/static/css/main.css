@@ -1,0 +1,21 @@
+﻿@charset "utf-8";
+blockquote,body,button,dd,div,dl,dt,fieldset,form,h1,h2,h3,h4,h5,h6,hr,input,legend,li,ol,p,pre,td,textarea,th,ul{margin:0;padding:0}
+body,button,input,select,textarea{font-size:14px;color:#666;font-family:"Microsoft YaHei","微软雅黑"}
+body{min-width:1200px;background:#f7f8fd;}
+h1,h2,h3,h4,h5,h6{font-size:100%}
+address,cite,dfn,em,var,i{font-style:normal}
+dd,dl,dt,li,ol,ul{list-style:none}
+fieldset,img{border:0}
+table{border-collapse:collapse;border-spacing:0}
+button,input[type=button],input[type=submit],input[type=reset]{cursor:pointer;outline:0}
+input::-ms-clear{display:none}
+input[type=password]::-ms-reveal{display:none}
+button{background:0 0;border:none}
+a{text-decoration:none;color:#333;cursor:pointer;outline:0}
+a:hover{color:#ff3022;}
+img{vertical-align:top;border:none}
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {color:#999;}
+input:-moz-placeholder, textarea:-moz-placeholder {color:#999;}
+input::-moz-placeholder, textarea::-moz-placeholder {color:#999;}
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {color:#999;}
+input[type="text"]:focus,input[type="password"]:focus,textarea:focus,select:focus{border-color:#b4cbff;/* box-shadow:0 0 5px #2fa4e7; */outline:none;}

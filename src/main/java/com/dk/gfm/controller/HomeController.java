@@ -21,4 +21,11 @@ public class HomeController {
         System.out.println("我进来了");
         return "index";
     }
+
+    @RequestMapping(value = "home")
+    public String home(){
+
+        System.out.println("ss");
+        return "home";
+    }
 }
