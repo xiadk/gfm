@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @ClassName HomeController
@@ -27,5 +28,12 @@ public class HomeController {
 
         System.out.println("ss");
         return "home";
+    }
+
+    @RequestMapping(value = "test")
+    public String test(){
+
+        System.out.println("test");
+        return "test";
     }
 }

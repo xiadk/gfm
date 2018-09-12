@@ -1,7 +1,7 @@
 ﻿@charset "utf-8";
 blockquote,body,button,dd,div,dl,dt,fieldset,form,h1,h2,h3,h4,h5,h6,hr,input,legend,li,ol,p,pre,td,textarea,th,ul{margin:0;padding:0}
 body,button,input,select,textarea{font-size:14px;color:#666;font-family:"Microsoft YaHei","微软雅黑"}
-body{min-width:1200px;background:#f7f8fd;}
+body{min-width:1200px;background:#FAFAFA;}
 h1,h2,h3,h4,h5,h6{font-size:100%}
 address,cite,dfn,em,var,i{font-style:normal}
 dd,dl,dt,li,ol,ul{list-style:none}
