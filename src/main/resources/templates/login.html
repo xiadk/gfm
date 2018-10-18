@@ -1,12 +1,12 @@
 ﻿<#import "defaultLayout.html" as defaultLayout >
-	<@defaultLayout.layout css=["css/login.css"] js=["js/login.js","js/util.js"]>
+	<@defaultLayout.layout css=["css/login.css"] js=["js/login.js"]>
 	<div class="login">
 <div id="app">
 
 	<h2>欢迎使用</h2>
 	<el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" class="demo-ruleForm">
 		<el-form-item prop="pass">
-			<el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="请输入识别码" class="form-input"></el-input>
+			<el-input  v-model="ruleForm2.pass" auto-complete="off" placeholder="请输入识别码" class="form-input"></el-input>
 		</el-form-item>
 		<el-form-item prop="imageCode">
 			<el-input  v-model="ruleForm2.imageCode" auto-complete="off" placeholder="验证码" class="form-input" ></el-input>

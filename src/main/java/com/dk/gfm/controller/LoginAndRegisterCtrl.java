@@ -1,15 +1,19 @@
 package com.dk.gfm.controller;
 
+import com.dk.gfm.common.Constants;
 import com.dk.gfm.common.ResultInfo;
+import com.dk.gfm.dao.UserMapper;
 import com.dk.gfm.service.LoginAndRegisterService;
 import com.dk.gfm.utli.ImageCodeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
@@ -36,14 +40,32 @@ public class LoginAndRegisterCtrl {
         return "login";
     }
 
-    @RequestMapping(value = "doLogin",method = RequestMethod.POST)
+    @RequestMapping(value =  "doRegister",method = RequestMethod.POST)
     @ResponseBody
-    public ResultInfo doLogin(@RequestBody Map<String, Object> userInfo){
+    public ResultInfo doRegister(@RequestBody Map<String, Object> userInfo){
         ResultInfo resultInfo = new ResultInfo();
 
-        String username = String.valueOf(userInfo.get("username"));
+        String userName = String.valueOf(userInfo.get("username"));
+        if (StringUtils.isBlank(userName)) {
+            resultInfo.code = ResultInfo.ERROR;
+            resultInfo.msg = "用户名不能为空";
+
+            return resultInfo;
+        }
+        loginAndRegisterService.doRegister(userName);
+
+
+        return resultInfo;
+    }
+
+    @RequestMapping(value = "doLogin",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultInfo doLogin(@RequestBody Map<String, Object> userInfo,HttpServletResponse response){
+        ResultInfo resultInfo = new ResultInfo();
+
+        String userName = String.valueOf(userInfo.get("username"));
         String imageCode = String.valueOf(userInfo.get("imageCode"));
-        if (StringUtils.isBlank(username)) {
+        if (StringUtils.isBlank(userName)) {
             resultInfo.code = ResultInfo.ERROR;
             resultInfo.msg = "用户名不能为空";
 
@@ -56,7 +78,10 @@ public class LoginAndRegisterCtrl {
             return resultInfo;
         }
 
-        resultInfo = loginAndRegisterService.doLogin(username, imageCode);
+        resultInfo = loginAndRegisterService.doLogin(userName, imageCode);
+        Cookie cookie = new Cookie(Constants.TOKEN,String.valueOf(resultInfo.obj));
+        cookie.setMaxAge(60*60*24*7);
+        response.addCookie(cookie);
 
         return resultInfo;
     }

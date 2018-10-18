@@ -19,13 +19,13 @@ public interface UserMapper {
      * @param id
      * @return
      */
-    @Select("select id,name,age from person where id=#{id}")
+    @Select("select id,name,age from t_user where id=#{id}")
     User selectById(@Param("id") Long id);
 
-    @Select("select * from person where name=#{userName}")
+    @Select("select * from t_user where name=#{userName}")
     User findUserByName(String userName);
 
     @Insert("INSERT INTO t_user(name) VALUES(#{userName})")
-    void insert(String userName);
+    long insert(String userName);
 
 }

@@ -1,4 +1,4 @@
-package com.dk.gfm.common;
+package com.dk.gfm.common.Annotation;
 
 /**
  * @ClassName CurrentUser

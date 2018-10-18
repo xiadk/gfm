@@ -35,34 +35,43 @@ var Main = {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    axios.post('/doLogin', {
-                        username: this.ruleForm2.pass,
-                        imageCode: this.ruleForm2.imageCode
-                    }).then(function (response) {
 
-                            var code = response.data.code;
-                            var msg = response.data.msg;
-                            var obj = response.data.obj;
-                            if (code == -1) {
-                                ctor.$message({
-                                    showClose: true,
-                                    message: msg,
-                                    type: 'error'
+                    var username = this.ruleForm2.pass;
+                    var imageCode = this.ruleForm2.imageCode;
+
+                    var params = {
+                        username: username,
+                        imageCode: imageCode
+                    };
+                    post('/doLogin',params,function (resp) {
+                        var token  = resp.obj;
+                        window.localStorage.setItem('token', token);
+                        //用户未注册
+                        if (resp.code == -2) {
+                            //注册弹框
+                            ctor.$confirm('用户名未注册, 是否注册?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                            }).then(() => {
+
+                                params={username: username};
+                                post('/doRegister',params,function (resp) {
+                                    Message.success("注册成功，请再次登陆");
                                 });
 
-                                return;
-                            }
-                            if (code == -2) {
+                            }).catch(() => {
+                                Message.info("已取消注册");
+                            });
 
-                            }
+                            return;
+                        }
 
                         window.location.href="/home";
+                    });
 
-                    }).catch(function (error) {
-                            console.log(error);
-                        });
                 } else {
-                    console.log('error submit!!');
+                    Message.error("不能为空")
                     return false;
                 }
             });
@@ -78,3 +87,4 @@ var Main = {
 }
 var Ctor = Vue.extend(Main)
 var ctor = new Ctor().$mount('#app')
+

@@ -1,5 +1,6 @@
 package com.dk.gfm.service;
 
+import com.dk.gfm.common.Constants;
 import com.dk.gfm.common.ResultInfo;
 import com.dk.gfm.dao.UserMapper;
 import com.dk.gfm.entity.User;
@@ -16,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -48,7 +50,7 @@ public class LoginAndRegisterService {
         return resultInfo;
     }
 
-    public ResultInfo doLogin(String username, String imageCode){
+    public ResultInfo doLogin(String userName, String imageCode){
         ResultInfo resultInfo = new ResultInfo();
         String checkImageCode = redis.opsForValue().get(imageCode);
         if (StringUtils.isBlank(checkImageCode)) {
@@ -59,7 +61,7 @@ public class LoginAndRegisterService {
         }
 
         boolean del = redis.delete(imageCode);
-        User user = userMapper.findUserByName(username);
+        User user = userMapper.findUserByName(userName);
         if (user == null) {
             resultInfo.code = ResultInfo.DATA_NOT_EXIST;
             resultInfo.msg = "用户名未注册";
@@ -67,9 +69,39 @@ public class LoginAndRegisterService {
             return  resultInfo;
         }
 
+        String token = UUID.randomUUID().toString().replace("-","");
+        redis.opsForHash().put(token, Constants.TOKEN, String.valueOf(user.getId()));
+
         resultInfo.code = ResultInfo.SUCCESS;
         resultInfo.msg ="登陆成功";
+        resultInfo.obj = token;
 
         return resultInfo;
     }
+
+    public ResultInfo doRegister(String userName){
+        ResultInfo resultInfo = new ResultInfo();
+
+        User user = userMapper.findUserByName(userName);
+        if (user != null) {
+            resultInfo.code = ResultInfo.DATA_NOT_EXIST;
+            resultInfo.msg = "用户名已被注册";
+
+            return  resultInfo;
+        }
+
+        long row = userMapper.insert(userName);
+        if (row <= 0) {
+            resultInfo.code = ResultInfo.ERROR;
+            resultInfo.msg = "注册失败";
+
+            return resultInfo;
+        }
+
+        resultInfo.code = ResultInfo.SUCCESS;
+        resultInfo.msg ="注册成功";
+
+        return resultInfo;
+    }
+
 }
