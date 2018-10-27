@@ -1,20 +1,20 @@
 ﻿<#import "defaultLayout.html" as defaultLayout >
-	<@defaultLayout.layout css=["css/home.css"] js=["js/home.js","js/myTeam.js"]>
+	<@defaultLayout.layout css=["css/home.css"] js=["js/home.js","js/myTeam.js","js/tally.js"]>
 	<div id="app" class="main">
-	<el-tabs type="border-card">
-		<el-tab-pane>
+	<el-tabs type="border-card" @tab-click="changeHomeTabs">
+		<el-tab-pane >
 			<span slot="label"><i class="el-icon-document"></i> 我的账单</span>
 
 			<#include "myBill.html">
 
 		</el-tab-pane>
-		<el-tab-pane>
+		<el-tab-pane >
 			<span slot="label"><i class="el-icon-edit-outline"></i> 随手记</span>
 
 			<#include "tally.html">
 
 		</el-tab-pane>
-		<el-tab-pane>
+		<el-tab-pane >
 			<span slot="label"><i class="el-icon-service"></i> 我的团队</span>
 
 			<#include "myTeam.html">

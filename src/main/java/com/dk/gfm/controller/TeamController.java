@@ -7,6 +7,7 @@ import com.dk.gfm.common.Annotation.CurrentUser;
 import com.dk.gfm.common.Annotation.LoginRequired;
 import com.dk.gfm.common.Enum.ParamsEnum;
 import com.dk.gfm.common.ResultInfo;
+import com.dk.gfm.dao.TeamMapper;
 import com.dk.gfm.entity.Active;
 import com.dk.gfm.entity.Team;
 import com.dk.gfm.service.HomeService;
@@ -16,19 +17,13 @@ import netscape.javascript.JSObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author xiadekang
@@ -42,6 +37,8 @@ public class TeamController {
 
     @Autowired
     private TeamService teamService;
+    @Autowired
+    private TeamMapper teamMapper;
 
     /**
      * @Author xiadekang
@@ -99,6 +96,39 @@ public class TeamController {
 
         result = teamService.getTeams(userId);
 
+        return  result;
+    }
+
+    @RequestMapping(value = "team",method = RequestMethod.DELETE)
+    @LoginRequired
+    @ResponseBody
+    public ResultInfo deleteTeam(@CurrentUser Long userId, @RequestBody Map<String, Object> teamInfo) {
+        ResultInfo result  = new ResultInfo();
+
+        Object teamIdObj = teamInfo.get("teamId");
+        if (teamIdObj == null) {
+            result.code = -1;
+            result.msg = "非法操作";
+
+            return result;
+        }
+        long teamId =Long.parseLong(Convert.orEles(teamIdObj, 1));
+        result = teamService.deleteTeam(userId, teamId);
+
+        return  result;
+    }
+
+    @RequestMapping(value = "members",method = RequestMethod.GET)
+    @LoginRequired
+    @ResponseBody
+    public ResultInfo getMembers(@CurrentUser Long userId, @RequestParam long teamId) {
+        ResultInfo result  = new ResultInfo();
+
+        List<String> members = teamMapper.selectTeamMembers(teamId);
+
+        result.code = 1;
+        result.msg = "获取成功";
+        result.obj = members;
         return  result;
     }
 }

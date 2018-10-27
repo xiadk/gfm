@@ -13,8 +13,9 @@ var Main = {
             });
             return data;
         };
+
         return {
-            //我的账单初始化参数
+            /**我的账单初始化参数**/
             formInline: {
                 user: ''
             },
@@ -74,7 +75,7 @@ var Main = {
             }],
 
 
-            //随手记初始化参数
+            /**随手记初始化参数**/
             form: {
                 name: '',
                 region: '',
@@ -84,20 +85,18 @@ var Main = {
                 delivery: false,
                 type: '',
                 resource: '',
-                desc: ''
+                desc: '',
+                members:[]
             },
-            data2: generateData2(),
-            value2: [],
-            filterMethod(query, item) {
-                return item.pinyin.indexOf(query) > -1;
-            },
+            options: [],
+            membersData: [],
 
 
             /** 我的团队*/
             tabPosition: 'left',
             teamInfo: [],
             /*dynamicTags: [{name:'夏德康',money:13}, {name:'海哥',money:18}, {name:'鑫爷',money:15}],*/
-            dynamicTags: [],
+            // dynamicTags: [],
             inputVisible: false,
             inputValue: '',
             addDynamicTags: [],
@@ -108,13 +107,23 @@ var Main = {
                 name: '',
                 type: '',
                 amount:0,
-                desc:''
+                desc:'',
+                members:[],
+                teamId:0
             }
 
         };
     },
     methods: {
-        //我的账单方法
+        changeHomeTabs(tab){
+            //我的团队数据初始化
+            if (tab.index == 2) {
+                this.teamInfo =[];
+                myTeam_changeTeam(this.teamInfo);
+            }
+
+        },
+        /**我的账单方法**/
         formatter(row, column) {
             return row.address;
         },
@@ -135,27 +144,26 @@ var Main = {
             console.log(`当前页: ${val}`);
         },
 
-        //随手记方法
+        /**随手记方法**/
         createEvent() {
-            var params  = {};
-            params["activeName"]=this.form.name;
-            params["region"]=this.form.region;
-            params["date"]=this.form.date;
-            params["time"]=this.form.time;
-            params["delivery"]=this.form.delivery;
-            params["type"]=this.form.type;
-            params["desc"]=this.form.desc;
-            params["amount"]=this.form.amount;
-            post("/active",params,function (data) {
-                Message.success(data.msg);
-            })
-
+            tally_createEvent(this.form);
+        },
+        obtainTeam() {
+            this.options=[];
+            tally_obtainTeam(this.options, this.loading);
+        },
+        filterMethod(query, item) {
+            return item.pinyin.indexOf(query) > -1;
+        },
+        selectMember(){
+            this.membersData=[];
+            tally_selectMember(this.membersData, this.form);
         },
 
 
-        //我的团队方法
+        /**我的团队方法**/
         deleteRow(index, rows) {
-            rows.splice(index, 1);
+            myTeam_deleteTeam(index, rows);
         },
         handleClose(tag) {
             this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
@@ -198,11 +206,10 @@ var Main = {
         ,
         changeTeam(tag){
             this.teamInfo=[];
-            this.dynamicTags=[];
-            myTeam_changeTeam(tag, this.teamInfo, this.dynamicTags);
-        },
-        expandChange(row, expandedRows){
-            alert("ss");
+            if (tag.index == 0) {
+                //所有团队
+                myTeam_changeTeam(this.teamInfo);
+            }
         }
     }
 }

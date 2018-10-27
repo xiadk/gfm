@@ -10,9 +10,7 @@ function myTeam_createTeam(teamForm, addDynamicTags){
     })
 }
 
-function myTeam_changeTeam(tag, teamInfo, dynamicTags) {
-    if ("allTeam" == tag.name) {
-        dynamicTags.push("事事都","ddd");
+function myTeam_changeTeam(teamInfo) {
         var params  = {};
         get("/team",params,function (data) {
             for (var i = 0, j = data.obj.length; i < j ; i ++) {
@@ -22,24 +20,20 @@ function myTeam_changeTeam(tag, teamInfo, dynamicTags) {
                     balance: team.balance,
                     name: team.name,
                     num:team.num,
-                    desc: team.desc
+                    desc: team.desc,
+                    members:team.members,
+                    teamId:team.teamId
                 })
             }
         })
-        /*teamInfo.push({
-            totalAmount: 120,
-            balance: 15,
-            name: '好滋好味鸡蛋仔',
-            num:5,
-            desc: '荷兰优质淡奶，奶香浓而不腻'
-        }, {
-            totalAmount: 120,
-            balance: 15,
-            name: '好滋好味鸡蛋仔',
-            num:5,
-            desc: '荷兰优质淡奶，奶香浓而不腻'
-        });*/
-    } else {
+}
 
-    }
+//移除团队
+function myTeam_deleteTeam(index, rows) {
+    // rows.splice(index, 1);
+    var params  = {};
+    params["teamId"]=rows[index].teamId;
+    del("/team",params,function (data) {
+        Message.success(data.msg);
+    })
 }

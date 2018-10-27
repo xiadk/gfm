@@ -15,22 +15,29 @@
         </el-col>
     </el-form-item>
         <el-form-item label="缴费团">
-            <el-select v-model="form.region" placeholder="请选择缴费团队">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+            <el-select v-model="form.team" placeholder="请选择缴费团队" @visible-change="obtainTeam">
+                <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
             </el-select>
         </el-form-item>
     <el-form-item label="缴费成员">
+        <el-tag  v-for="member in form.members">{{ member }}</el-tag>
         <el-popover
                 placement="right"
-                trigger="click">
+                trigger="click"
+                @show="selectMember">
             <el-transfer
                     filterable
                     :filter-method="filterMethod"
                     filter-placeholder="搜索用户"
-                    v-model="value2"
-                    :data="data2">
-                <el-button class="transfer-footer" slot="right-footer" size="small">确定</el-button>
+                    :titles=['全部用户','已选用户']
+                    v-model="form.members"
+                    :data="membersData">
+                <!--<el-button class="transfer-footer" slot="right-footer" size="small">确定</el-button>-->
             </el-transfer>
             <el-button slot="reference">选择</el-button>
         </el-popover>

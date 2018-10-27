@@ -2,9 +2,11 @@ package com.dk.gfm.dao;
 
 import com.dk.gfm.entity.Active;
 import com.dk.gfm.entity.Team;
+import com.dk.gfm.entity.UserActive;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,6 +37,15 @@ public interface TeamMapper {
     @Options(useGeneratedKeys=true)
     void insertUserTeam(long team_id, double balance, String username);
 
-    @Select("SELECT name, `desc`, COUNT(username) as num, SUM(balance) as balance, total FROM t_team AS tt LEFT JOIN t_user_team AS tut ON tt.`id`=tut.`team_id` WHERE user_id=#{arg0}  GROUP BY tt.id")
+    @Select("SELECT team_id as teamId, name, `desc`, COUNT(username) as num, SUM(balance) as balance, total FROM t_team AS tt LEFT JOIN t_user_team AS tut ON tt.`id`=tut.`team_id` WHERE user_id=#{arg0} and del=0  GROUP BY tt.id")
     List<Map<String, Object>> selectTeam(long userId);
+
+    @Select("SELECT username FROM t_user_team  WHERE  team_id =#{arg0}")
+    List<String> selectTeamMembers(long teamId);
+
+    @Update("UPDATE t_team SET del=1 WHERE id=#{arg0} and user_id=#{arg1}")
+    int deleteTeamById(long teamId, long userId);
+
+    @Update("UPDATE t_user_team SET balance=balance-#{arg2} WHERE team_id=#{arg1} and username=#{arg0}")
+    int updateBalance(String username, long teamId, double amount);
 }

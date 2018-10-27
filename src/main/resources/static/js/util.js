@@ -48,10 +48,36 @@ function post(url,params,callback) {
     });
 }
 
-//发送post请求
+//发送get请求
 function get(url,params,callback) {
     axios({
         method:'get',
+        url:url,
+        params:params,
+        headers: {'token': window.localStorage.getItem('token')},
+    }).then(function (response) {
+        var code = response.data.code;
+        var msg = response.data.msg;
+        var obj = response.data.obj;
+        if (code == 0 || code == -1) {
+            Message.error(msg);
+
+            return;
+        }
+        callback(response.data);
+    }).catch(function (error) {
+        vm.$notify.error({
+            title: '错误',
+            message: error,
+            position: 'bottom-right'
+        });
+    });
+}
+
+//发送get请求
+function del(url,params,callback) {
+    axios({
+        method:'delete',
         url:url,
         data: params,
         headers: {'token': window.localStorage.getItem('token')},

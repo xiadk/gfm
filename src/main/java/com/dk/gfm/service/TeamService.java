@@ -68,10 +68,31 @@ public class TeamService {
         ResultInfo result = new ResultInfo();
 
         List<Map<String, Object>> teams = teamMapper.selectTeam(userId);
+        teams.forEach(team->{
+            List<String> members = teamMapper.selectTeamMembers((Long) team.get("teamId"));
+            team.put("members",members);
+        });
 
         result.code = 1;
         result.msg = "获取团队信息成功";
         result.obj = teams;
+        return result;
+
+    }
+
+    public ResultInfo deleteTeam(long userId, long teamId){
+        ResultInfo result = new ResultInfo();
+
+        int row = teamMapper.deleteTeamById(teamId, userId);
+        if (row <= 0) {
+            result.code = -1;
+            result.msg = "非法操作";
+
+            return result;
+        }
+
+        result.code = 1;
+        result.msg = "删除成功";
         return result;
 
     }

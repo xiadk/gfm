@@ -12,6 +12,7 @@ public class Active {
     private String desc;
     private int disable;
     private double amount;
+    private long team_id;
 
     public long getId() {
         return id;
@@ -75,5 +76,13 @@ public class Active {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public long getTeam_id() {
+        return team_id;
+    }
+
+    public void setTeam_id(long team_id) {
+        this.team_id = team_id;
     }
 }
