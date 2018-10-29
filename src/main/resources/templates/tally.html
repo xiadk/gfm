@@ -1,20 +1,20 @@
-<el-form ref="form" :model="form" label-width="80px" style="width: 80%;margin: auto;">
-    <el-form-item label="活动名称">
+<el-form ref="form" :model="form"  label-width="80px" style="width: 80%;margin: auto;">
+    <el-form-item label="活动名称" prop="name">
         <el-col :span="11">
             <el-input v-model="form.name"></el-input>
         </el-col>
     </el-form-item>
-    <el-form-item label="活动经费">
+    <el-form-item label="活动经费" prop="amount">
         <el-col :span="11">
             <el-input-number v-model="form.amount"></el-input-number>&nbsp;&nbsp;元
         </el-col>
     </el-form-item>
-    <el-form-item label="活动区域">
+    <el-form-item label="活动区域" prop="region">
         <el-col :span="11">
             <el-input v-model="form.region"></el-input>
         </el-col>
     </el-form-item>
-        <el-form-item label="缴费团">
+        <el-form-item label="缴费团" prop="team">
             <el-select v-model="form.team" placeholder="请选择缴费团队" @visible-change="obtainTeam">
                 <el-option
                         v-for="item in options"
@@ -24,7 +24,7 @@
                 </el-option>
             </el-select>
         </el-form-item>
-    <el-form-item label="缴费成员">
+    <el-form-item label="缴费成员" prop="members">
         <el-tag  v-for="member in form.members">{{ member }}</el-tag>
         <el-popover
                 placement="right"
@@ -43,16 +43,20 @@
         </el-popover>
 
     </el-form-item>
-        <el-form-item label="活动时间">
+        <el-form-item label="活动时间" prop="date">
             <el-col :span="11">
+                <el-form-item prop="date">
                 <el-date-picker type="date" placeholder="选择日期" v-model="form.date" style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
+                </el-form-item>
             </el-col>
             <el-col class="line" :span="2">-</el-col>
             <el-col :span="11">
+                <el-form-item prop="time">
                 <el-time-picker type="fixed-time" placeholder="选择时间" v-model="form.time" style="width: 100%;" value-format="HH:mm:ss"></el-time-picker>
+                </el-form-item>
             </el-col>
         </el-form-item>
-        <el-form-item label="短信通知">
+        <el-form-item label="短信通知" prop="delivery">
             <el-switch v-model="form.delivery"></el-switch>
         </el-form-item>
         <!--<el-form-item label="活动性质">
@@ -63,17 +67,17 @@
                 <el-checkbox label="4" name="type">玩游戏</el-checkbox>
             </el-checkbox-group>
         </el-form-item>-->
-        <el-form-item label="活动性质">
+        <el-form-item label="活动性质" prop="type">
             <el-radio-group v-model="form.type">
                 <el-radio label="1">线上品牌商赞助</el-radio>
                 <el-radio label="2">线下场地免费</el-radio>
             </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注">
+        <el-form-item label="备注" prop="desc">
             <el-input type="textarea" v-model="form.desc"></el-input>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="createEvent">立即创建</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="resetForm('form')">重置</el-button>
         </el-form-item>
 </el-form>

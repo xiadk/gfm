@@ -3,6 +3,7 @@ package com.dk.gfm.common.Interceptor;
 import com.alibaba.fastjson.JSONObject;
 import com.dk.gfm.common.Annotation.LoginRequired;
 import com.dk.gfm.common.Constants;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -58,17 +59,17 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             // 判断是否存在令牌信息，如果存在，则允许登录
             Cookie cookie = Arrays.stream(request.getCookies()).filter(cok -> cok.getName().equals(Constants.TOKEN)).findFirst().orElse(new Cookie(Constants.TOKEN,""));
             String accessToken = cookie.getValue();
-            /*if ("".equals(accessToken)) {
+            if (StringUtils.isBlank(accessToken)) {
                 response.sendRedirect("/login");
 
                 return false;
-            }*/
+            }
             String uid =  Optional.ofNullable((String)redis.opsForHash().get(accessToken,Constants.TOKEN)).orElse("");
-            /*if("".equals(uid)) {
+            if(StringUtils.isBlank(uid)) {
                 response.sendRedirect("/login");
 
                 return false;
-            }*/
+            }
             request.setAttribute(Constants.UID,Long.valueOf(uid));
         }
         return true;

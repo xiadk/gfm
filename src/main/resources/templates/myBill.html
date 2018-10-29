@@ -1,10 +1,10 @@
-<el-form :inline="true" :model="formInline" class="demo-form-inline">
+<el-form :inline="true" :model="activeForm" class="demo-form-inline">
     <el-form-item label="审批人">
-        <el-input v-model="formInline.user" placeholder="审批人"></el-input>
+        <el-input v-model="activeForm.name" placeholder="活动名称"></el-input>
     </el-form-item>
     <el-form-item label="时间">
         <el-date-picker
-                v-model="formInline.date"
+                v-model="activeForm.date"
                 type="datetimerange"
                 :picker-options="pickerOptions2"
                 range-separator="至"
@@ -22,9 +22,13 @@
 <el-table :data="tableData" style="width: 100%">
     <el-table-column prop="date" label="日期" sortable width="180" :filters="[{text: '2016-05-01', value: '2016-05-01'}, {text: '2016-05-02', value: '2016-05-02'}, {text: '2016-05-03', value: '2016-05-03'}, {text: '2016-05-04', value: '2016-05-04'}]" :filter-method="filterHandler">
     </el-table-column>
-    <el-table-column prop="name" label="姓名" width="180">
+    <el-table-column prop="name" label="活动名称" width="180">
     </el-table-column>
-    <el-table-column prop="address" label="地址" :formatter="formatter">
+    <el-table-column prop="amount" label="活动金额" width="90">
+    </el-table-column>
+    <el-table-column prop="desc" label="描述" width="180">
+    </el-table-column>
+    <el-table-column prop="address" label="活动区域" :formatter="formatter">
     </el-table-column>
     <el-table-column prop="tag" label="标签" width="100" :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]" :filter-method="filterTag" filter-placement="bottom-end">
         <template slot-scope="scope">

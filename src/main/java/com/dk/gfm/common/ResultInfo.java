@@ -1,5 +1,7 @@
 package com.dk.gfm.common;
 
+import java.io.Serializable;
+
 /**
  * @ClassName ResultInfo
  * @Description 返回参数对象
@@ -7,7 +9,7 @@ package com.dk.gfm.common;
  * @Date 2018/9/10 11:10
  * @Version 1.0
  **/
-public class ResultInfo {
+public class ResultInfo implements Serializable{
 
     public final static int SUCCESS = 1;
     public final static int ERROR = -1;

@@ -10,12 +10,13 @@ function myTeam_createTeam(teamForm, addDynamicTags){
     })
 }
 
-function myTeam_changeTeam(teamInfo) {
+function myTeam_tab(obj) {
+    obj.teamInfo=[];
         var params  = {};
         get("/team",params,function (data) {
             for (var i = 0, j = data.obj.length; i < j ; i ++) {
                 var team = data.obj[i];
-                teamInfo.push({
+                obj.teamInfo.push({
                     totalAmount: team.total,
                     balance: team.balance,
                     name: team.name,

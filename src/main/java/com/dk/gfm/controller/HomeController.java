@@ -60,6 +60,7 @@ public class HomeController {
      * @return java.lang.String
      **/
     @RequestMapping(value = "active",method = RequestMethod.POST)
+    @LoginRequired
     @ResponseBody
     public ResultInfo active(@RequestBody Map<String, Object> userInfo){
         ResultInfo result = new ResultInfo();
@@ -125,5 +126,18 @@ public class HomeController {
         result = homeService.active(active, delivery, members);
 
         return result;
+    }
+
+    @RequestMapping(value = "active",method = RequestMethod.GET)
+    @LoginRequired
+    @ResponseBody
+    public ResultInfo getActive(@CurrentUser long userId ,@RequestParam String activeName) {
+        ResultInfo result  = new ResultInfo();
+
+        result = homeService.getActive();
+
+        result.code = 1;
+        result.msg = "获取成功";
+        return  result;
     }
 }

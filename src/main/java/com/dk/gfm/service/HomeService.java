@@ -1,5 +1,6 @@
 package com.dk.gfm.service;
 
+import com.dk.gfm.common.MyException;
 import com.dk.gfm.common.ResultInfo;
 import com.dk.gfm.dao.ActiveMapper;
 import com.dk.gfm.dao.TeamMapper;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -29,16 +29,14 @@ public class HomeService {
     private TeamMapper teamMapper;
 
     @Transactional
-    public ResultInfo active(Active active, boolean delivery, List<String> members) {
+    public ResultInfo active(Active active, boolean delivery, List<String> members){
         ResultInfo result = new ResultInfo();
 
         activeMapper.insertActive(active);
         long activeId = active.getId();
         if (activeId <= 0) {
-            result.code = -1;
-            result.msg = "添加活动失败";
 
-            return result;
+            throw new MyException(-1, "添加活动失败");
         }
 
         //平均金额
@@ -61,23 +59,32 @@ public class HomeService {
             //添加成员
             activeMapper.insertUserActive(userActive);
             if (userActive.getActive_id() <= 0) {
-                result.code = -1;
-                result.msg = "添加用户:"+username+"记录失败";
 
-                return result;
+                throw new MyException(-1, "添加用户:"+username+"记录失败");
             }
-            int teamRow = teamMapper.updateBalance(username, activeId, averageAmount);
+            int teamRow = teamMapper.updateBalance(username, active.getTeam_id(), averageAmount);
             if (teamRow <= 0) {
-                result.code = -1;
-                result.msg = "更新用户:"+username+"金额失败";
 
-                return result;
+                throw new MyException(-1, username+"余额已不足");
             }
         }
 
 
         result.code = 1;
         result.msg = "添加活动成功";
+
+        return result;
+    }
+
+    /**
+     * @Author xiadekang
+     * @Description 获取活动记录
+     * @Date 2018/10/29
+     * @param []
+     * @return com.dk.gfm.common.ResultInfo
+     **/
+    public ResultInfo getActive(){
+        ResultInfo result = new ResultInfo();
 
         return result;
     }

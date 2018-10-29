@@ -69,7 +69,7 @@ public class TeamService {
 
         List<Map<String, Object>> teams = teamMapper.selectTeam(userId);
         teams.forEach(team->{
-            List<String> members = teamMapper.selectTeamMembers((Long) team.get("teamId"));
+            List<Map<String, Object>> members = teamMapper.selectTeamMembers((Long) team.get("teamId"));
             team.put("members",members);
         });
 

@@ -40,12 +40,12 @@ public interface TeamMapper {
     @Select("SELECT team_id as teamId, name, `desc`, COUNT(username) as num, SUM(balance) as balance, total FROM t_team AS tt LEFT JOIN t_user_team AS tut ON tt.`id`=tut.`team_id` WHERE user_id=#{arg0} and del=0  GROUP BY tt.id")
     List<Map<String, Object>> selectTeam(long userId);
 
-    @Select("SELECT username FROM t_user_team  WHERE  team_id =#{arg0}")
-    List<String> selectTeamMembers(long teamId);
+    @Select("SELECT username, balance FROM t_user_team  WHERE  team_id =#{arg0}")
+    List<Map<String, Object>> selectTeamMembers(long teamId);
 
     @Update("UPDATE t_team SET del=1 WHERE id=#{arg0} and user_id=#{arg1}")
     int deleteTeamById(long teamId, long userId);
 
-    @Update("UPDATE t_user_team SET balance=balance-#{arg2} WHERE team_id=#{arg1} and username=#{arg0}")
+    @Update("UPDATE t_user_team SET balance=balance-#{arg2} WHERE team_id=#{arg1} and username=#{arg0} and balance > #{arg2}")
     int updateBalance(String username, long teamId, double amount);
 }

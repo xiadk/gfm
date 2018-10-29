@@ -1,23 +1,9 @@
 var Main = {
     data() {
-        const generateData2 = _ => {
-            const data = [];
-            const cities = ['上海', '北京', '广州', '深圳', '南京', '西安', '成都'];
-            const pinyin = ['shanghai', 'beijing', 'guangzhou', 'shenzhen', 'nanjing', 'xian', 'chengdu'];
-            cities.forEach((city, index) => {
-                data.push({
-                    label: city,
-                    key: index,
-                    pinyin: pinyin[index]
-                });
-            });
-            return data;
-        };
-
         return {
             /**我的账单初始化参数**/
-            formInline: {
-                user: ''
+            activeForm: {
+                name: ''
             },
             currentPage1: 5,
             currentPage2: 5,
@@ -90,13 +76,21 @@ var Main = {
             },
             options: [],
             membersData: [],
+            ruleForm: {
+                name: '',
+                region: '',
+                date1: '',
+                date2: '',
+                delivery: false,
+                type: [],
+                resource: '',
+                desc: ''
+            },
 
 
             /** 我的团队*/
             tabPosition: 'left',
             teamInfo: [],
-            /*dynamicTags: [{name:'夏德康',money:13}, {name:'海哥',money:18}, {name:'鑫爷',money:15}],*/
-            // dynamicTags: [],
             inputVisible: false,
             inputValue: '',
             addDynamicTags: [],
@@ -116,10 +110,19 @@ var Main = {
     },
     methods: {
         changeHomeTabs(tab){
-            //我的团队数据初始化
-            if (tab.index == 2) {
-                this.teamInfo =[];
-                myTeam_changeTeam(this.teamInfo);
+            switch(tab.index){
+                case 0:
+                    myBill_tab(this);
+
+                    break;
+                case 1:
+
+                    break;
+                case 2:
+                    myTeam_tab(this);
+
+                    break;
+
             }
 
         },
@@ -146,18 +149,20 @@ var Main = {
 
         /**随手记方法**/
         createEvent() {
-            tally_createEvent(this.form);
+            tally_createEvent(this);
         },
         obtainTeam() {
-            this.options=[];
-            tally_obtainTeam(this.options, this.loading);
+            tally_obtainTeam(this);
         },
         filterMethod(query, item) {
             return item.pinyin.indexOf(query) > -1;
         },
         selectMember(){
-            this.membersData=[];
-            tally_selectMember(this.membersData, this.form);
+            tally_selectMember(this);
+        },
+        //重置按钮
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
         },
 
 
@@ -205,10 +210,9 @@ var Main = {
         }
         ,
         changeTeam(tag){
-            this.teamInfo=[];
             if (tag.index == 0) {
                 //所有团队
-                myTeam_changeTeam(this.teamInfo);
+                myTeam_changeTeam(this);
             }
         }
     }

@@ -121,10 +121,10 @@ public class TeamController {
     @RequestMapping(value = "members",method = RequestMethod.GET)
     @LoginRequired
     @ResponseBody
-    public ResultInfo getMembers(@CurrentUser Long userId, @RequestParam long teamId) {
+    public ResultInfo getMembers( @RequestParam long teamId) {
         ResultInfo result  = new ResultInfo();
 
-        List<String> members = teamMapper.selectTeamMembers(teamId);
+        List<Map<String, Object>> members = teamMapper.selectTeamMembers(teamId);
 
         result.code = 1;
         result.msg = "获取成功";
